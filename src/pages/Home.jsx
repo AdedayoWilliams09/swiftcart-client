@@ -24,9 +24,9 @@ const Home = () => {
         setCategories(Array.isArray(catRes.data) ? catRes.data : []);
         setFeaturedProducts(Array.isArray(prodRes.data.products) ? prodRes.data.products : []);
         setBanners(Array.isArray(bannerRes.data) ? bannerRes.data : []);
-        console.log('Banners:', bannerRes.data);
-        console.log('Categories:', catRes.data);
-        console.log('Products:', prodRes.data.products);
+        // console.log('Banners:', bannerRes.data);
+        // console.log('Categories:', catRes.data);
+        // console.log('Products:', prodRes.data.products);
       } catch (err) {
         setCategories([]);
         setFeaturedProducts([]);
@@ -58,7 +58,7 @@ const Home = () => {
                   src={
                     banner.image.startsWith('http')
                       ? banner.image
-                      : `http://localhost:5000${banner.image}`
+                      : `${import.meta.env.VITE_API_BASE_URL.replace('/api', '')}${banner.image}`
                   }
                   alt={banner.title || "Banner"}
                   className="w-full h-40 object-cover rounded shadow"
