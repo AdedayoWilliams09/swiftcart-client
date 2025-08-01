@@ -141,12 +141,12 @@ const Header = () => {
               </span>
             </button>
             {showCatDropdown && (
-              <div className="bg-white border-t w-full">
+              <div className="bg-white border-t w-full flex flex-col items-center">
                 {categories.map(cat => (
                   <Link
                     key={cat._id}
                     to={`/products?category=${cat._id}`}
-                    className="block px-6 py-2 text-sm text-gray-700 hover:bg-green-50 text-left"
+                   className="block w-full max-w-xs text-center py-2 text-sm text-gray-700 hover:bg-green-50"
                     onClick={() => {
                       setShowCatDropdown(false);
                       toggleMenu();
