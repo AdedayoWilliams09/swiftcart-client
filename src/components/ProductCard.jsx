@@ -39,7 +39,7 @@ const ProductCard = ({ product }) => {
           transition={{ type: "spring", stiffness: 200 }}
         />
         <h3 className="font-bold text-lg mb-1">{product.name}</h3>
-        <p className="text-green-600 font-semibold text-xl mb-1">₦{product.price.toLocaleString()}</p>
+        <p className="text-green-600 font-semibold text-xl mb-1">₦{product.price.toLocaleString() || '0.00'}</p>
         <p className="text-gray-500 text-sm mb-2">{product.brand}</p>
         <div className="flex items-center">
           <span className="text-yellow-400 mr-1">★</span>
