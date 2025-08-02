@@ -9,6 +9,9 @@ import { motion } from 'framer-motion';
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
 
+  // Defensive: don't render if product is not valid
+  if (!product || typeof product !== 'object') return null;
+
   const handleAddToCart = () => {
     dispatch(addToCart({ productId: product._id, quantity: 1 }));
     toast.success('Added to cart!');
@@ -18,6 +21,12 @@ const ProductCard = ({ product }) => {
     dispatch(addToWishlist(product._id));
     toast.success('Added to wishlist!');
   };
+
+  // Defensive: handle missing fields
+  const imageUrl =
+    product.images && Array.isArray(product.images) && product.images[0] && product.images[0].url
+      ? product.images[0].url
+      : '/placeholder.png';
 
   return (
     <motion.div
@@ -32,18 +41,20 @@ const ProductCard = ({ product }) => {
     >
       <Link to={`/products/${product._id}`}>
         <motion.img
-          src={product.images[0]?.url || '/placeholder.png'}
-          alt={product.name}
+          src={imageUrl}
+          alt={product.name || 'Product'}
           className="w-full h-48 object-cover rounded mb-2"
           whileHover={{ scale: 1.08, rotate: 1 }}
           transition={{ type: "spring", stiffness: 200 }}
         />
-        <h3 className="font-bold text-lg mb-1">{product.name}</h3>
-        <p className="text-green-600 font-semibold text-xl mb-1">₦{product.price.toLocaleString() || '0.00'}</p>
-        <p className="text-gray-500 text-sm mb-2">{product.brand}</p>
+        <h3 className="font-bold text-lg mb-1">{product.name || 'No Name'}</h3>
+        <p className="text-green-600 font-semibold text-xl mb-1">
+          ₦{typeof product.price === 'number' ? product.price.toLocaleString() : '0.00'}
+        </p>
+        <p className="text-gray-500 text-sm mb-2">{product.brand || ''}</p>
         <div className="flex items-center">
           <span className="text-yellow-400 mr-1">★</span>
-          <span>{product.rating}</span>
+          <span>{product.rating || 0}</span>
         </div>
       </Link>
       <div className="mt-2 flex space-x-2">

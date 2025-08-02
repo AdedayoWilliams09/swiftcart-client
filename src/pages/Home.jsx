@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import HeroSection from '../components/HeroSection';
 import ProductCard from '../components/ProductCard';
 import { Link } from 'react-router-dom';
-// import axios from 'axios';
-import api from '../api'
+import api from '../api';
 import { motion } from 'framer-motion';
 
 const Home = () => {
@@ -21,12 +20,24 @@ const Home = () => {
           api.get('/products?limit=8'),
           api.get('/banners'),
         ]);
+
+        // Defensive: handle both array and object response
         setCategories(Array.isArray(catRes.data) ? catRes.data : []);
-        setFeaturedProducts(Array.isArray(prodRes.data.products) ? prodRes.data.products : []);
         setBanners(Array.isArray(bannerRes.data) ? bannerRes.data : []);
-        // console.log('Banners:', bannerRes.data);
+
+        // Handle both { products: [...] } and [...] response
+        let products = [];
+        if (Array.isArray(prodRes.data)) {
+          products = prodRes.data;
+        } else if (Array.isArray(prodRes.data.products)) {
+          products = prodRes.data.products;
+        }
+        setFeaturedProducts(products);
+
+        // For debugging
         // console.log('Categories:', catRes.data);
-        // console.log('Products:', prodRes.data.products);
+        // console.log('Products:', products);
+        // console.log('Banners:', bannerRes.data);
       } catch (err) {
         setCategories([]);
         setFeaturedProducts([]);
@@ -56,9 +67,9 @@ const Home = () => {
               >
                 <img
                   src={
-                    banner.image.startsWith('http')
+                    banner.image && banner.image.startsWith('http')
                       ? banner.image
-                      : `${import.meta.env.VITE_API_BASE_URL.replace('/api', '')}${banner.image}`
+                      : `${import.meta.env.VITE_API_BASE_URL.replace('/api', '')}${banner.image || ''}`
                   }
                   alt={banner.title || "Banner"}
                   className="w-full h-40 object-cover rounded shadow"
@@ -73,31 +84,30 @@ const Home = () => {
       )}
 
       {/* Categories Section */}
-<section className="container mx-auto px-4 py-8 overflow-hidden">
-  <h2 className="text-2xl font-bold mb-6 text-center">Shop by Category</h2>
-
-  <div className="flex overflow-x-auto space-x-4 py-2 px-1 scrollbar scrollbar-thumb-green-300 scrollbar-track-transparent">
-    {!loading && categories.length === 0 && (
-      <div className="text-gray-500">No categories found.</div>
-    )}
-    
-    {categories.map(cat => (
-      <Link
-        to={`/products?category=${encodeURIComponent(cat._id)}`}
-        key={cat._id}
-        className="flex-shrink-0 flex flex-col items-center bg-white rounded-lg shadow hover:shadow-lg p-4 transition group min-w-[120px] w-[120px] sm:w-[140px] text-center"
-      >
-        <div className="bg-green-100 rounded-full h-12 w-12 flex items-center justify-center mb-2 group-hover:bg-green-200">
-          <span className="text-xl font-bold text-green-600">
-            {cat.name[0]}
-          </span>
+      <section className="container mx-auto px-4 py-8 overflow-hidden">
+        <h2 className="text-2xl font-bold mb-6 text-center">Shop by Category</h2>
+        <div className="flex overflow-x-auto space-x-4 py-2 px-1 scrollbar scrollbar-thumb-green-300 scrollbar-track-transparent">
+          {!loading && categories.length === 0 && (
+            <div className="text-gray-500">No categories found.</div>
+          )}
+          {categories.map(cat => (
+            <Link
+              to={`/products?category=${encodeURIComponent(cat._id)}`}
+              key={cat._id}
+              className="flex-shrink-0 flex flex-col items-center bg-white rounded-lg shadow hover:shadow-lg p-4 transition group min-w-[120px] w-[120px] sm:w-[140px] text-center"
+            >
+              <div className="bg-green-100 rounded-full h-12 w-12 flex items-center justify-center mb-2 group-hover:bg-green-200">
+                <span className="text-xl font-bold text-green-600">
+                  {typeof cat.name === 'string' && cat.name.length > 0 ? cat.name[0] : '?'}
+                </span>
+              </div>
+              <span className="font-semibold text-sm text-center">
+                {typeof cat.name === 'string' ? cat.name : JSON.stringify(cat.name)}
+              </span>
+            </Link>
+          ))}
         </div>
-        <span className="font-semibold text-sm text-center">{cat.name}</span>
-      </Link>
-    ))}
-  </div>
-</section>
-
+      </section>
 
       {/* Featured Products Section */}
       <section className="container mx-auto px-4 py-8">
