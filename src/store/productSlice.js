@@ -2,8 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 // import axios from 'axios';
 import api from '../api'
 
-api.defaults.baseURL = 'http://localhost:5000/api';
-api.defaults.withCredentials = true;
+
 
 // Fetch products
 export const fetchProducts = createAsyncThunk('products/fetch', async (params, thunkAPI) => {
