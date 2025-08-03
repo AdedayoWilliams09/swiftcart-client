@@ -9,7 +9,6 @@ import { motion } from 'framer-motion';
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
 
-  // Defensive: don't render if product is not valid
   if (!product || typeof product !== 'object') return null;
 
   const handleAddToCart = () => {
@@ -22,22 +21,15 @@ const ProductCard = ({ product }) => {
     toast.success('Added to wishlist!');
   };
 
-  // Defensive: handle missing fields
   const imageUrl =
-    product.images && Array.isArray(product.images) && product.images[0] && product.images[0].url
-      ? product.images[0].url
-      : '/placeholder.png';
+    product?.images?.[0]?.url || '/placeholder.png';
 
   return (
     <motion.div
       className="bg-white rounded-lg shadow hover:shadow-lg transition p-4 flex flex-col"
-      whileHover={{
-        scale: 1.04,
-        y: -8,
-        boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
-      }}
+      whileHover={{ scale: 1.04, y: -8 }}
       whileTap={{ scale: 0.98 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
     >
       <Link to={`/products/${product._id}`}>
         <motion.img
@@ -45,7 +37,7 @@ const ProductCard = ({ product }) => {
           alt={product.name || 'Product'}
           className="w-full h-48 object-cover rounded mb-2"
           whileHover={{ scale: 1.08, rotate: 1 }}
-          transition={{ type: "spring", stiffness: 200 }}
+          transition={{ type: 'spring', stiffness: 200 }}
         />
         <h3 className="font-bold text-lg mb-1">{product.name || 'No Name'}</h3>
         <p className="text-green-600 font-semibold text-xl mb-1">
