@@ -5,7 +5,6 @@ import ProductCard from '../components/ProductCard';
 import CategoryFilter from '../components/CategoryFilter';
 import SearchBar from '../components/SearchBar';
 import Pagination from '../components/Pagination';
-// import axios from 'axios';
 import api from '../api'
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -15,7 +14,7 @@ function useQuery() {
 
 const Products = () => {
   const dispatch = useDispatch();
-  const { products, total, page, pages, loading } = useSelector(state => state.products);
+  const { products, total, page, pages, loading, error } = useSelector(state => state.products);
 
   const [search, setSearch] = useState('');
   const [categories, setCategories] = useState([]);
@@ -55,6 +54,9 @@ const Products = () => {
     }
   };
 
+  // Debugging
+  console.log('products:', products);
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
@@ -63,6 +65,10 @@ const Products = () => {
       </div>
       {loading ? (
         <div className="text-center py-8">Loading...</div>
+      ) : !Array.isArray(products) ? (
+        <div className="text-red-500">Error loading products. {typeof products === 'object' && products?.message ? products.message : ''}</div>
+      ) : products.length === 0 ? (
+        <div className="text-center text-gray-500 py-8">No products found.</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map(product => <ProductCard key={product._id} product={product} />)}
