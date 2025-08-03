@@ -31,6 +31,7 @@ export const updateCartItem = createAsyncThunk('cart/update', async ({ productId
     return res.data;
   } catch (err) {
     return thunkAPI.rejectWithValue(err.response.data.message);
+   
   }
 });
 
@@ -67,13 +68,21 @@ const cartSlice = createSlice({
       .addCase(fetchCart.pending, (state) => { state.loading = true; })
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload?.items || [];
+        state.items = action.payload?.items || action.payload || [];
       })
       .addCase(fetchCart.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
-      .addCase(addToCart.fulfilled, (state, action) => { state.items = action.payload.items; })
-      .addCase(updateCartItem.fulfilled, (state, action) => { state.items = action.payload.items; })
-      .addCase(removeFromCart.fulfilled, (state, action) => { state.items = action.payload.items; })
-      .addCase(clearCart.fulfilled, (state, action) => { state.items = []; });
+      .addCase(addToCart.fulfilled, (state, action) => {
+        state.items = action.payload.items || action.payload || [];
+      })
+      .addCase(updateCartItem.fulfilled, (state, action) => {
+        state.items = action.payload.items || action.payload || [];
+      })
+      .addCase(removeFromCart.fulfilled, (state, action) => {
+        state.items = action.payload.items || action.payload || [];
+      })
+      .addCase(clearCart.fulfilled, (state, action) => {
+        state.items = [];
+      });
   }
 });
 
