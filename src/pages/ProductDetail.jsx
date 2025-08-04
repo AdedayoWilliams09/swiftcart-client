@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProduct } from '../store/productSlice';
 import { addToCart } from '../store/cartSlice';
@@ -25,18 +25,30 @@ const renderStars = (rating = 0) => {
 const ProductDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { product, loading } = useSelector(state => state.products);
+  const { user } = useSelector(state => state.auth);
 
   useEffect(() => {
     dispatch(fetchProduct(id));
   }, [id, dispatch]);
 
   const handleAddToCart = () => {
+    if (!user) {
+      toast.error('Please login to add to cart!');
+      navigate('/login');
+      return;
+    }
     dispatch(addToCart({ productId: product._id, quantity: 1 }));
     toast.success('Added to cart!');
   };
 
   const handleAddToWishlist = () => {
+    if (!user) {
+      toast.error('Please login to add to wishlist!');
+      navigate('/login');
+      return;
+    }
     dispatch(addToWishlist(product._id));
     toast.success('Added to wishlist!');
   };
