@@ -40,8 +40,7 @@ const Cart = () => {
         .reduce((sum, item) => sum + (item.product.price * item.quantity), 0)
     : 0;
 
-  // Debugging
-  console.log('cart items:', items);
+ 
 
   if (!user) {
     return (

@@ -34,10 +34,7 @@ const Home = () => {
         }
         setFeaturedProducts(products);
 
-        // For debugging
-        // console.log('Categories:', catRes.data);
-        // console.log('Products:', products);
-        // console.log('Banners:', bannerRes.data);
+       
       } catch (err) {
         setCategories([]);
         setFeaturedProducts([]);

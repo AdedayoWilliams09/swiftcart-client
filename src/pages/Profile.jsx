@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchProfile, logoutUser } from '../store/authSlice';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-// import axios from 'axios';
+
 import api from '../api'
 
 const Profile = () => {

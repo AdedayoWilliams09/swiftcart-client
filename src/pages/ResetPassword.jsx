@@ -1,7 +1,7 @@
 import React from 'react';
 import * as yup from 'yup';
 import AuthForm from '../components/AuthForm';
-// import axios from 'axios';
+
 import api from '../api'
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';

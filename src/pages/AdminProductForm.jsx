@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-// import axios from 'axios';
+
 import api from '../api'
 import toast from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
